@@ -6,7 +6,19 @@ dotenv.config({
     path: './env'
 })
 
-connectDB(); 
+connectDB() //an async function also gives back a promise, hance we used try/catch for debugging errors
+.then(()=>{
+    app.on("error", (error)=>{
+        console.log("error after connecting", error);
+        throw error;
+    })
+    app.listen(process.env.PORT|| 8000, ()=>{
+        console.log(`Server is running at port: ${process.env.PORT}`)
+    });
+})
+.catch((err)=>{
+    console.log("Mongodb connection failed!! ,", err);
+})
 //semicolon good practice
 // always remember "DB IS IN ANOTHER CONTINENT, SO USE ASYNC AWAIT"
 
